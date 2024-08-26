@@ -133,49 +133,49 @@ static inline void cpyInt(int* dst, int* src, size_t size)
 static inline void bindVbo(int index)
 {
     glBindBuffer(GL_ARRAY_BUFFER, r.buffers.meshes[index].vbo.ID);
-#ifdef DEBUG
+    #ifdef DEBUG
     printf("Vbo bound: %d\n", index);
-#endif
+    #endif
 }
 // Binds the VAO of a mesh with index of index
 static inline void bindVao(int index)
 {
     glBindVertexArray(r.buffers.meshes[index].vao.ID);
-#ifdef DEBUG
+    #ifdef DEBUG
     printf("Vao bound: %d\n", index);
-#endif
+    #endif
 }
 // Binds the EBO of a mesh with index of index
 static inline void bindEbo(int index)
 {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, r.buffers.meshes[index].ebo.ID);
-#ifdef DEBUG
+    #ifdef DEBUG
     printf("Ebo bound: %d\n", index);
-#endif
+    #endif
 }
 
 static inline void unbindVbo()
 {
     glBindBuffer(GL_ARRAY_BUFFER, 0);
-#ifdef DEBUG
+    #ifdef DEBUG
     printf("Vbo unbound\n");
-#endif
+    #endif
 }
 
 static inline void unbindVao()
 {
     glBindVertexArray(0);
-#ifdef DEBUG
+    #ifdef DEBUG
     printf("Vao unbound\n");
-#endif
+    #endif
 }
 
 static inline void unbindEbo()
 {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-#ifdef DEBUG
+    #ifdef DEBUG
     printf("Ebo unbound\n");
-#endif
+    #endif
 }
 
 // Loads a Mesh/Model to the Mesh object of index of i
@@ -232,7 +232,7 @@ static void loadModel(mesh m, int i)
 
         r.buffers.meshes[i].vbo.size += m.vSize;
         #ifdef DEBUG
-        printf("Done\n");
+        printf("Done!\n");
         #endif
     }
 
@@ -331,6 +331,8 @@ void fl_uploadModel(mesh m, int* rtnIndex, bool send)
 }
 
 // Sends the mesh of index i to the rendering pipeline
+// This all boils down to if the Engine architecture allows for rendering without having filled all of the vertex attributes
+// This would require an array of shader programs each processing a certain ammount of vertex attributes.
 static inline void sendToPipeline(int i)
 {
     bindVao(i);

@@ -13,7 +13,7 @@ float vert[] =
      0.5f, -0.5f, 0.0f,
      0.0f,  0.5f, 0.0f
 };
-int n = -1;      // The variable to store the ID of the mesh
+int n = -1;      // The variable to store the ID of the mesh -1 means invalid ID
 
 int main(void)
 {
