@@ -197,9 +197,9 @@ static void loadModel(mesh m, int i)
     // Concatenation of vertices to a VBO
     if (r.buffers.meshes[i].vbo.size < 1)
     {
-#ifdef DEBUG
+        #ifdef DEBUG
         printf("Adding vertices from a mesh to a renderer VBO object with index of %d ...\n", i);
-#endif
+        #endif
 
         r.buffers.meshes[i].vbo.vertices = (float*)malloc(m.vSize);
         if (r.buffers.meshes[i].vbo.vertices == NULL)
@@ -210,9 +210,9 @@ static void loadModel(mesh m, int i)
         cpyFloat(r.buffers.meshes[i].vbo.vertices, m.vertices, m.vSize);
 
         r.buffers.meshes[i].vbo.size = m.vSize;
-#ifdef DEBUG
+        #ifdef DEBUG
         printf("Done\n");
-#endif
+        #endif
 
     }
     else if (r.buffers.meshes[i].vbo.size > 0)
@@ -224,16 +224,16 @@ static void loadModel(mesh m, int i)
             printf("Failed to reallocate memory for the vertices with mesh ID of %d\n", i);
             fl_error("\n", FL_FATAL);
         }
-#ifdef DEBUG
+        #ifdef DEBUG
         printf("Concatenating a mesh to another one with index of %d ...\n", i);
-#endif
+        #endif
 
         cpyFloat(r.buffers.meshes[i].vbo.vertices + r.buffers.meshes[i].vbo.size, m.vertices, m.vSize);
 
         r.buffers.meshes[i].vbo.size += m.vSize;
-#ifdef DEBUG
+        #ifdef DEBUG
         printf("Done\n");
-#endif
+        #endif
     }
 
     // Concatenation of indices(if any) to an EBO
@@ -241,16 +241,16 @@ static void loadModel(mesh m, int i)
     {
         if (r.buffers.meshes[i].ebo.size < 1)
         {
-#ifdef DEBUG
+            #ifdef DEBUG
             printf("EBO with mesh index of %d will not be used\n", i);
-#endif
+            #endif
             r.buffers.meshes[i].ebo.isUsed = false;
             return;
         }
 
-#ifdef DEBUG
+        #ifdef DEBUG
         printf("No EBO with mesh index of %d concatenation will occur\n", i);
-#endif
+        #endif
         return;
 
     }
@@ -259,9 +259,9 @@ static void loadModel(mesh m, int i)
 
         if (r.buffers.meshes[i].ebo.size < 1)
         {
-#ifdef DEBUG
+            #ifdef DEBUG
             printf("Loading indices to a mesh with index of %d\n", i);
-#endif
+            #endif
 
             r.buffers.meshes[i].ebo.isUsed = true;
             r.buffers.meshes[i].ebo.indices = (int*)malloc(m.iSize);
@@ -278,9 +278,9 @@ static void loadModel(mesh m, int i)
         }
         else
         {
-#ifdef DEBUG
+            #ifdef DEBUG
             printf("Concatenating indices to a mesh with index of %d \n", i);
-#endif
+            #endif
 
             r.buffers.meshes[i].ebo.isUsed = true;
             r.buffers.meshes[i].ebo.indices = (int*)realloc(r.buffers.meshes[i].ebo.indices, r.buffers.meshes[i].ebo.size + m.iSize);
