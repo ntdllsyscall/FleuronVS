@@ -42,6 +42,9 @@
     <ClCompile Include="include\common.h">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\ui\ui.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\graphics\renderer.h">
@@ -60,6 +63,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\engine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ui\ui.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

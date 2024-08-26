@@ -5,6 +5,7 @@
 #include "hWindow/input.h"
 
 
+
 struct FleuronEngineBase
 {
     struct Window window;
@@ -13,7 +14,7 @@ struct FleuronEngineBase
 };
 
 extern struct FleuronEngineBase fleuron;
-
+    
 
 // This function will be user called in order to:
 // Create a Window and initialize GLFW

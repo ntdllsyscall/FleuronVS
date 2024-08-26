@@ -31,6 +31,9 @@ int main(void)
     glfwSetTime(0);
     current = glfwGetTime();
 
+    // UI code here
+
+
     fl_compileVertexShader("C:\\Programming\\C\\FleuronVS\\shaders\\vertex.glsl");
     fl_compileFragmentShader("C:\\Programming\\C\\FleuronVS\\shaders\\fragment.glsl");
     fl_createProgram();
@@ -39,8 +42,6 @@ int main(void)
     fl_uploadModel(triangle, &n, true);
 
     startEngine();
-
-
 
 
     return 0;

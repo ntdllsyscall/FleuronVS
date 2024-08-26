@@ -1,7 +1,6 @@
 #include "common.h"
 #include <engine.h>
 
-
 struct FleuronEngineBase fleuron;
 
 
@@ -13,6 +12,7 @@ void initEngine(int width, int height, const char* title)
     fl_initWindowingSystem();
     fl_createWindow(width, height, title);
     fl_initRenderer();
+    fl_initUI();
 
     return;
 }
@@ -22,12 +22,15 @@ void startEngine()
     // Render loop
     while (!glfwWindowShouldClose(fleuron.window.ptrWindow))
     {
-        // Process input
 
         Update();
 
         // check and call events and swap the buffers
         glfwPollEvents();
+
+        fl_UI();
+        printf("nop");
+
         glfwSwapBuffers(fleuron.window.ptrWindow);
     }
     cleanUp();
