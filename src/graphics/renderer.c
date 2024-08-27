@@ -58,12 +58,14 @@ static inline void allocMeshMem(int* i)
     }
     else
     {
-        r.buffers.meshes = (struct RendererMeshBase*)realloc(r.buffers.meshes, (r.buffers.sizeInElements + 1) * sizeof(struct RendererMeshBase));
+        struct RendererMeshBase* check = (struct RendererMeshBase*)realloc(r.buffers.meshes, (r.buffers.sizeInElements + 1) * sizeof(struct RendererMeshBase));
         r.buffers.sizeInElements++;
-        if (r.buffers.meshes == NULL)
+        if (check == NULL)
         {
             fl_error("Could not reallocate memory for r.buffers.meshes struct", FL_FATAL);
         }
+        r.buffers.meshes = (struct RendererMeshBase*)check;
+
         r.buffers.meshes[r.buffers.sizeInElements].vbo.ID = 0;
         r.buffers.meshes[r.buffers.sizeInElements].vbo.size = 0;
         r.buffers.meshes[r.buffers.sizeInElements].vbo.vertices = NULL;
@@ -103,7 +105,12 @@ static inline void removeMeshMem(int i)
     *(r.buffers.meshes[i].pIndex) = -1;    // Making the handle invalid
     r.buffers.meshes[i] = r.buffers.meshes[r.buffers.sizeInElements - 1];
     *(r.buffers.meshes[i].pIndex) = i;
-    r.buffers.meshes = realloc(r.buffers.meshes, (r.buffers.sizeInElements - 1) * sizeof(struct RendererMeshBase));
+    struct RendererMeshBase* check = (struct RendererMeshBase*)realloc(r.buffers.meshes, (r.buffers.sizeInElements - 1) * sizeof(struct RendererMeshBase));
+    if (check == NULL)
+    {
+        fl_error("Could not remove mesh memory, realloc returned null", FL_FATAL);
+    }
+    r.buffers.meshes = (struct RendererMeshBase*)check;
     r.buffers.sizeInElements--;
 
 
@@ -218,12 +225,13 @@ static void loadModel(mesh m, int i)
     else if (r.buffers.meshes[i].vbo.size > 0)
     {
 
-        r.buffers.meshes[i].vbo.vertices = (float*)realloc(r.buffers.meshes[i].vbo.vertices, r.buffers.meshes[i].vbo.size + m.vSize);
-        if (r.buffers.meshes[i].vbo.vertices == NULL)
+        float* check = (float*)realloc(r.buffers.meshes[i].vbo.vertices, r.buffers.meshes[i].vbo.size + m.vSize);
+        if (check == NULL)
         {
             printf("Failed to reallocate memory for the vertices with mesh ID of %d\n", i);
             fl_error("\n", FL_FATAL);
         }
+        r.buffers.meshes[i].vbo.vertices = check;
         #ifdef DEBUG
         printf("Concatenating a mesh to another one with index of %d ...\n", i);
         #endif
@@ -283,12 +291,13 @@ static void loadModel(mesh m, int i)
             #endif
 
             r.buffers.meshes[i].ebo.isUsed = true;
-            r.buffers.meshes[i].ebo.indices = (int*)realloc(r.buffers.meshes[i].ebo.indices, r.buffers.meshes[i].ebo.size + m.iSize);
-            if (r.buffers.meshes[i].ebo.indices == NULL)
+            int* check = (int*)realloc(r.buffers.meshes[i].ebo.indices, r.buffers.meshes[i].ebo.size + m.iSize);
+            if (check == NULL)
             {
                 printf("Failed to reallocate memory for the indices with mesh ID of %d\n", i);
                 fl_error("\n", FL_FATAL);
             }
+            r.buffers.meshes[i].ebo.indices = check;
 
             cpyInt(r.buffers.meshes[i].ebo.indices + r.buffers.meshes[i].ebo.size, m.indices, m.iSize);
 
