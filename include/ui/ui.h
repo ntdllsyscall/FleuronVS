@@ -16,25 +16,9 @@ extern "C"
 #undef FLEURON_GUI_SOURCE
 #endif	// !__cplusplus
 
-/*
-extern "C"
-{
-	#include "../engine.h"
-}
-*/
+
 #ifndef __cplusplus
 	void fl_initUI();
 	void fl_UI();
 	void fl_uiCleanUp();
 #endif // !__cplusplus
-
-
-
-/*
-extern "C"
-{
-	void fl_initUI();
-	void fl_UI();
-	void fl_uiCleanUp();
-};
-*/
