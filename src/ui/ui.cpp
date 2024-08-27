@@ -99,6 +99,19 @@ static inline void bufferHandler()
 		}
 		else
 		{
+			for (int i = 0; i < (fleuron.renderer.buffers.meshes[meshIDInput].vbo.size) / (sizeof(float)); i++)
+			{
+				if(i % 3 == 0)
+				{
+					ImGui::Text("%.3f ", fleuron.renderer.buffers.meshes[meshIDInput].vbo.vertices[i]);
+				}
+				else
+				{
+					ImGui::SameLine();
+					ImGui::Text("%.3f ", fleuron.renderer.buffers.meshes[meshIDInput].vbo.vertices[i]);
+				}
+			}
+
 			displayInfo1 = true;
 			if (ImGui::Button("Clear"))
 			{
