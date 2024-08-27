@@ -33,7 +33,7 @@ static inline void endFrame()
 }
 
 // UI code goes here
-extern void fl_initUI()
+void fl_initUI()
 {
 	createUiContext();
 	return;
