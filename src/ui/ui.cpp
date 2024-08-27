@@ -1,4 +1,5 @@
 #include <ui/ui.h>
+#include <stdio.h>
 
 static inline void createUiContext()
 {
@@ -47,6 +48,10 @@ void fl_UI()
 	ImGui::Begin("Hello I am GUI!!!!!!!!");
 
 	ImGui::Text("This is some text, please work!");
+	if(ImGui::Button("LOKO LOKO POBEDA!!!!!"))
+	{
+		printf("Pressed\n");
+	}
 
 	ImGui::End();
 	endFrame();

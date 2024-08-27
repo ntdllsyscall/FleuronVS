@@ -31,7 +31,7 @@ void startEngine()
         glfwPollEvents();
 
         fl_UI();
-        printf("nop");
+        
 
         glfwSwapBuffers(fleuron.window.ptrWindow);
     }
