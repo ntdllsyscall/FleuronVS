@@ -40,99 +40,144 @@ void fl_initUI()
 	return;
 }
 
-static int meshIDInput;
-static bool displayInfo;	// VBO examiner
-static bool displayInfo1;
 
 
 // Helps with examining buffers of different kind, used for debugging
-static inline void bufferHandler()
+// Opotimize checking meshIDInput >= sizeInElements
+static bool displayBufferHandler = true;
+
+static inline void Debug()
 {
-	ImGui::Begin("Buffer examiner");
+	ImGui::Begin("Debug");
 
-	ImGui::Text("Number of meshes: %d", fleuron.renderer.buffers.sizeInElements);
-	ImGui::InputInt("Enter a mesh ID", &meshIDInput);
-	
-	
-	if(ImGui::Button("Examine") || displayInfo == true)
+	if (ImGui::Button("Buffer handler"))
 	{
-		// !!!!!!!!
-		ImGui::BeginChild("##scrolling", ImVec2(0, 100), true);
-		if (meshIDInput >= fleuron.renderer.buffers.sizeInElements)
-		{
-			ImGui::Text("Invalid ID (Too large)");
-			displayInfo = true;
-			if (ImGui::Button("Clear"))
-			{
-				displayInfo = false;
-			}
-		}else
-		{
-			//fleuron.renderer.buffers.meshes[1].vbo.size
-
-			displayInfo = true;
-			ImGui::Text("Vbo size: %d", fleuron.renderer.buffers.meshes[meshIDInput].vbo.size);
-			ImGui::Text("Ebo size: %d", fleuron.renderer.buffers.meshes[meshIDInput].ebo.size);
-			ImGui::Text("Vbo id: %d", fleuron.renderer.buffers.meshes[meshIDInput].vbo.ID);
-			ImGui::Text("Ebo id: %d", fleuron.renderer.buffers.meshes[meshIDInput].ebo.ID);
-			ImGui::Text("Vao id: %d", fleuron.renderer.buffers.meshes[meshIDInput].vao.ID);
-
-			if(ImGui::Button("Clear"))
-			{
-				displayInfo = false;
-			}
-		}
-		ImGui::EndChild();
+		displayBufferHandler = true;
 	}
-
-	if(ImGui::Button("View vertices") || displayInfo1 == true)
-	{
-		ImGui::BeginChild("##scrolling1", ImVec2(0, 100), true);
-		if (meshIDInput >= fleuron.renderer.buffers.sizeInElements)
-		{
-			ImGui::Text("Invalid ID (Too large)");
-			displayInfo1 = true;
-			if (ImGui::Button("Clear"))
-			{
-				displayInfo1 = false;
-			}
-		}
-		else
-		{
-			for (int i = 0; i < (fleuron.renderer.buffers.meshes[meshIDInput].vbo.size) / (sizeof(float)); i++)
-			{
-				if(i % 3 == 0)
-				{
-					ImGui::Text("%.3f ", fleuron.renderer.buffers.meshes[meshIDInput].vbo.vertices[i]);
-				}
-				else
-				{
-					ImGui::SameLine();
-					ImGui::Text("%.3f ", fleuron.renderer.buffers.meshes[meshIDInput].vbo.vertices[i]);
-				}
-			}
-
-			displayInfo1 = true;
-			if (ImGui::Button("Clear"))
-			{
-				displayInfo1 = false;
-			}
-		}
-		ImGui::EndChild();
-	}
-
 
 
 	ImGui::End();
+}
+
+static int meshIDInput;
+static bool displayInfo;	// Examiner
+static bool displayInfo1;	// Vertices
+static bool displayInfo2;	// Indices
+
+
+static inline void bufferHandler()
+{
+	if(displayBufferHandler == true)
+	{
+		ImGui::Begin("Buffer examiner", &displayBufferHandler);
+
+		ImGui::Text("Number of meshes: %d", fleuron.renderer.buffers.sizeInElements);
+		ImGui::InputInt("Enter a mesh ID", &meshIDInput);
+
+		if (meshIDInput >= fleuron.renderer.buffers.sizeInElements)
+		{
+			ImGui::Text("Invalid ID (Too large)");
+		}
+		else
+		{
+
+			if (ImGui::Button("Examine") || displayInfo == true)
+			{
+				// !!!!!!!!
+				ImGui::BeginChild("##scrolling", ImVec2(0, 100), true);
+
+				{
+					//fleuron.renderer.buffers.meshes[1].vbo.size
+
+					displayInfo = true;
+					ImGui::Text("Vbo size: %d", fleuron.renderer.buffers.meshes[meshIDInput].vbo.size);
+					ImGui::Text("Ebo size: %d", fleuron.renderer.buffers.meshes[meshIDInput].ebo.size);
+					ImGui::Text("Vbo id: %d", fleuron.renderer.buffers.meshes[meshIDInput].vbo.ID);
+					ImGui::Text("Ebo id: %d", fleuron.renderer.buffers.meshes[meshIDInput].ebo.ID);
+					ImGui::Text("Vao id: %d", fleuron.renderer.buffers.meshes[meshIDInput].vao.ID);
+
+					if (ImGui::Button("Clear"))
+					{
+						displayInfo = false;
+					}
+				}
+				ImGui::EndChild();
+			}
+
+			if (ImGui::Button("View vertices") || displayInfo1 == true)
+			{
+				ImGui::BeginChild("##scrolling1", ImVec2(0, 100), true);
+
+				{
+					for (int i = 0; i < (fleuron.renderer.buffers.meshes[meshIDInput].vbo.size) / (sizeof(float)); i++)
+					{
+						if (i % 3 == 0)
+						{
+							ImGui::Text("%.3f ", fleuron.renderer.buffers.meshes[meshIDInput].vbo.vertices[i]);
+						}
+						else
+						{
+							ImGui::SameLine();
+							ImGui::Text("%.3f ", fleuron.renderer.buffers.meshes[meshIDInput].vbo.vertices[i]);
+						}
+					}
+
+					displayInfo1 = true;
+					if (ImGui::Button("Clear"))
+					{
+						displayInfo1 = false;
+					}
+				}
+				ImGui::EndChild();
+			}
+
+			if (ImGui::Button("View indices") || displayInfo2 == true)
+			{
+
+				ImGui::BeginChild("##scrolling2", ImVec2(0, 200), true);
+
+
+				{
+					displayInfo2 = true;
+
+					for (int i = 0; i < (fleuron.renderer.buffers.meshes[meshIDInput].ebo.size) / sizeof(int); i++)
+					{
+						if (i % 3 == 0)
+						{
+							ImGui::Text("%d", fleuron.renderer.buffers.meshes[meshIDInput].ebo.indices[i]);
+						}
+						else
+						{
+							ImGui::SameLine();
+							ImGui::Text("%d", fleuron.renderer.buffers.meshes[meshIDInput].ebo.indices[i]);
+						}
+					}
+
+
+					if (ImGui::Button("Clear"))
+					{
+						displayInfo2 = false;
+					}
+				}
+				ImGui::EndChild();
+			}
+		}
+
+
+		ImGui::End();
+	}
 
 	return;
 }
+
+
 
 // NOTE: Look at the position of start frame and end frame
 void fl_UI()
 {
 	startFrame();
 	
+	Debug();
 	bufferHandler();
 
 	endFrame();
