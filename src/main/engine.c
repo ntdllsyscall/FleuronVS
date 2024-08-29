@@ -6,14 +6,15 @@
 struct FleuronEngineBase fleuron;
 
 
-void initEngine(int width, int height, const char* title)
+void initEngine(int width, int height, const char* title, const char* vertexShaderSrc, const char* fragmentShaderSrc)
 {
     fleuron.window.glfwVersion = glfwGetVersionString();
     printf("%s\n", fleuron.window.glfwVersion);
 
     fl_initWindowingSystem();
     fl_createWindow(width, height, title);
-    fl_initRenderer();
+
+    fl_initRenderer(vertexShaderSrc, fragmentShaderSrc);
     fl_initUI();
 
     return;
@@ -21,6 +22,7 @@ void initEngine(int width, int height, const char* title)
 
 void startEngine()
 {
+
     // Render loop
     while (!glfwWindowShouldClose(fleuron.window.ptrWindow))
     {

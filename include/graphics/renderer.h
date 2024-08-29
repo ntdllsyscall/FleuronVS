@@ -24,9 +24,8 @@ typedef struct Mesh mesh;
 
 struct Rotation
 {
-    float pitch;
-    float yaw;
-    float roll;
+    float angle;
+    vec3 axis;
 };
 
 struct Transform
@@ -39,7 +38,7 @@ struct Transform
 // Add animation support
 struct Object
 {
-    int* modelIndex; // Pointer to the index of the model used by the object
+    int* p_modelIndex; // Pointer to the index of the model used by the object
     struct Transform transform;
     struct Object* next;
 };
@@ -103,6 +102,7 @@ struct MatrixLocationBase
 
 struct MatrixBase
 {
+    mat4 rotation;
     mat4 model;
     mat4 projection;
     mat4 view;
@@ -120,10 +120,10 @@ struct RendererBase
 };
 
 
-void fl_initRenderer();
+void fl_initRenderer(const char* vertexShaderSrc, const char* fragmentShaderSrc);
 void fl_uploadModel(mesh m, int* rtnIndex, bool send);
 void fl_pushObject(object* obj);
-
+void fl_renderObjectTable();
 
 
 

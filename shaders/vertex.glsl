@@ -8,5 +8,5 @@ uniform mat4 view;
 
 void main()
 {
-    gl_Position = view * projection * model * rotation * vec4(aPos.x, aPos.y, aPos.z, 1.0);
+    gl_Position = projection * view * model * rotation * vec4(aPos.x, aPos.y, aPos.z, 1.0);
 }

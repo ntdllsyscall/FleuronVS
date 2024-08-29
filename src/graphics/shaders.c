@@ -12,6 +12,10 @@ static inline void readFile(const char* fName, char** dst)
     fseek(fd, 0, SEEK_END);
 
     *dst = (char*)malloc(ftell(fd));
+    if (*dst == NULL || dst == NULL)
+    {
+        fl_error("Could not allocate memory for file", FL_FATAL);
+    }
 #ifdef DEBUG
     printf("Allocated %ld bytes for a file to be read: \n", ftell(fd));
 #endif
@@ -96,7 +100,10 @@ void fl_createProgram()
     glDeleteShader(r.vertexShader);
     glDeleteShader(r.fragmentShader);
     printf("Successfully linked the shader program!\n");
+    
+    glUseProgram(r.program);
 
+    fleuron.renderer.matrices.locations.rotation = glGetUniformLocation(r.program, "rotation");
     fleuron.renderer.matrices.locations.model=  glGetUniformLocation(r.program, "model");
     fleuron.renderer.matrices.locations.projection =  glGetUniformLocation(r.program, "projection");
     fleuron.renderer.matrices.locations.view =  glGetUniformLocation(r.program, "view");

@@ -19,7 +19,7 @@ extern struct FleuronEngineBase fleuron;
 // This function will be user called in order to:
 // Create a Window and initialize GLFW
 // Set the context, callbacks and other things for OpenGL
-void initEngine(int width, int height, const char* title);
+void initEngine(int width, int height, const char* title, const char* vertexShaderSrc, const char* fragmentShaderSrc);
 // Called at the end of the program or when fatal errors happen
 void cleanUp();
 void startEngine();

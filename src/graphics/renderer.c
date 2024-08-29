@@ -6,7 +6,7 @@
 
 #define r fleuron.renderer
 
-void fl_initRenderer()
+void fl_initRenderer(const char* vertexShaderSrc, const char* fragmentShaderSrc)
 {
     // Make sure to init the renderer struct here too.
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -15,18 +15,32 @@ void fl_initRenderer()
         fl_error("Could not initialize OpenGL \n", FL_FATAL);
     }
     glViewport(0, 0, fleuron.window.width, fleuron.window.height);
+    
+    // Shader handling
+    fl_compileVertexShader(vertexShaderSrc);
+    fl_compileFragmentShader(fragmentShaderSrc);
+    fl_createProgram();
 
     r.buffers.meshes = NULL;
     r.buffers.sizeInElements = 0;
     r.objectTable.objects = NULL;
     r.objectTable.sizeInElements = 0;
 
-    glmc_mat4_identity(r.matrices.model);
-    glmc_mat4_identity(r.matrices.projection);
-    glmc_mat4_identity(r.matrices.view);
+    glUseProgram(r.shaders.program);
+
+    glmc_mat4_identity(fleuron.renderer.matrices.rotation);
+    glmc_mat4_identity(fleuron.renderer.matrices.model);
+    glmc_mat4_identity(fleuron.renderer.matrices.projection);
+    glmc_mat4_identity(fleuron.renderer.matrices.view);
+    
+
+    glUniformMatrix4fv(fleuron.renderer.matrices.locations.projection, 1, GL_FALSE, (float*)fleuron.renderer.matrices.rotation);
+    glUniformMatrix4fv(fleuron.renderer.matrices.locations.view, 1, GL_FALSE, (float*)fleuron.renderer.matrices.view);
+    glUniformMatrix4fv(fleuron.renderer.matrices.locations.rotation, 1, GL_FALSE, (float*)fleuron.renderer.matrices.rotation);
+    glUniformMatrix4fv(fleuron.renderer.matrices.locations.model, 1, GL_FALSE, (float*)fleuron.renderer.matrices.model);
 
     // TODO: Needs to be float
-    glmc_perspective(90, fleuron.window.width / fleuron.window.height, 0.1, 100, r.matrices.projection);
+    //glmc_perspective(90, fleuron.window.width / fleuron.window.height, 0.1, 100, r.matrices.projection);
 
     return;
 }
@@ -152,49 +166,36 @@ static inline void cpyInt(int* dst, int* src, size_t size)
 static inline void bindVbo(int index)
 {
     glBindBuffer(GL_ARRAY_BUFFER, r.buffers.meshes[index].vbo.ID);
-    #ifdef DEBUG
-    printf("Vbo bound: %d\n", index);
-    #endif
+
 }
 // Binds the VAO of a mesh with index of index
 static inline void bindVao(int index)
 {
     glBindVertexArray(r.buffers.meshes[index].vao.ID);
-    #ifdef DEBUG
-    printf("Vao bound: %d\n", index);
-    #endif
+
 }
 // Binds the EBO of a mesh with index of index
 static inline void bindEbo(int index)
 {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, r.buffers.meshes[index].ebo.ID);
-    #ifdef DEBUG
-    printf("Ebo bound: %d\n", index);
-    #endif
+
 }
 
 static inline void unbindVbo()
 {
     glBindBuffer(GL_ARRAY_BUFFER, 0);
-    #ifdef DEBUG
-    printf("Vbo unbound\n");
-    #endif
 }
 
 static inline void unbindVao()
 {
     glBindVertexArray(0);
-    #ifdef DEBUG
-    printf("Vao unbound\n");
-    #endif
+
 }
 
 static inline void unbindEbo()
 {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-    #ifdef DEBUG
-    printf("Ebo unbound\n");
-    #endif
+
 }
 
 // Loads a Mesh/Model to the Mesh object of index of i
@@ -327,7 +328,10 @@ static void loadModel(mesh m, int i)
 // The mesh should have dynamically allocated arrays (verrtices and indices)
 void fl_uploadModel(mesh m, int* rtnIndex, bool send)
 {
-    allocMeshMem(rtnIndex);
+    if (send == true)
+    {
+        allocMeshMem(rtnIndex);
+    }
     loadModel(m, *rtnIndex);
 
     // VBO configuration (Temporary)
@@ -379,7 +383,7 @@ static inline object* getObjAt(size_t index)
         return NULL;
     }
     object* current = r.objectTable.objects;
-    for (int i = 1; i <= index; i++)
+    for (int i = 0; i < index; i++)
     {
         current = current->next;
     }
@@ -390,16 +394,45 @@ static inline object* getObjAt(size_t index)
 // Appends an object to the linked list in the object table
 void fl_pushObject(object* obj)
 {
-    (*(getObjAt(r.objectTable.sizeInElements - 1))).next = obj;
-    (*obj).next = NULL;
+    object* current = r.objectTable.objects;
+    if (current == NULL)
+    {
+        r.objectTable.objects = obj;
+        obj->next = NULL;
+        r.objectTable.sizeInElements++;
+        return;
+    }
+    else
+    {
+        for (int i = 0; i < r.objectTable.sizeInElements - 1; i++)
+        {
+            current = current->next;
+        }
+        current->next = obj;
+        obj->next = NULL;
+        r.objectTable.sizeInElements++;
+        return;
+    }
+    
 }
 
 void fl_renderObjectTable()
 {
     object* current;
-    for (int i = 0; (current = getObjAt(i))->next ; i++)
+    for (int i = 0; (current = getObjAt(i)) != NULL; i++)
     {
+        // Matrices
+        glmc_rotate(r.matrices.rotation, current->transform.rotation.angle, current->transform.rotation.axis);
+        glmc_translate(r.matrices.model, current->transform.position);
 
+        glUniformMatrix4fv(r.matrices.locations.rotation, 1, GL_FALSE, (float*)r.matrices.rotation);
+        glUniformMatrix4fv(r.matrices.locations.model, 1, GL_FALSE, (float*)r.matrices.model);
+
+        glmc_mat4_identity(fleuron.renderer.matrices.rotation);
+        glmc_mat4_identity(fleuron.renderer.matrices.model);
+
+        // Future support of child objects should be added;
+        sendToPipeline(*(current->p_modelIndex));
     }
 
     return;
