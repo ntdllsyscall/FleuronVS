@@ -379,7 +379,7 @@ static inline object* getObjAt(size_t index)
         return NULL;
     }
     object* current = r.objectTable.objects;
-    for (int i = 1; i < index; i++)
+    for (int i = 1; i <= index; i++)
     {
         current = current->next;
     }
@@ -396,7 +396,11 @@ void fl_pushObject(object* obj)
 
 void fl_renderObjectTable()
 {
+    object* current;
+    for (int i = 0; (current = getObjAt(i))->next ; i++)
+    {
 
+    }
 
     return;
 }
