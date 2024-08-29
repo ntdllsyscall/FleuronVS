@@ -16,6 +16,16 @@ void fl_initRenderer()
     }
     glViewport(0, 0, fleuron.window.width, fleuron.window.height);
 
+    r.buffers.meshes = NULL;
+    r.buffers.sizeInElements = 0;
+    r.objectTable.objects = NULL;
+    r.objectTable.sizeInElements = 0;
+
+    glmc_mat4_identity(r.matrices.rotation);
+    glmc_mat4_identity(r.matrices.model);
+    glmc_mat4_identity(r.matrices.projection);
+    glmc_mat4_identity(r.matrices.view);
+
     return;
 }
 
@@ -348,7 +358,7 @@ static inline void sendToPipeline(int i)
     glUseProgram(r.shaders.program);
     if (r.buffers.meshes[i].ebo.isUsed == true)
     {
-        glDrawElements(GL_TRIANGLES, (r.buffers.meshes[i].ebo.size) / (sizeof(int)), GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, ((r.buffers.meshes[i].ebo.size) / (sizeof(int))), GL_UNSIGNED_INT, 0);
     }
     else
     {
@@ -358,4 +368,28 @@ static inline void sendToPipeline(int i)
     unbindVao();
     return;
 }
+                            // -----------------------------    Object Handling    ------------------------------ //
+// 0 indexed
+static inline object* getObjAt(size_t index)
+{
+    if (index >= r.objectTable.sizeInElements || index < 0)
+    {
+        return NULL;
+    }
+    object* current = r.objectTable.objects;
+    for (int i = 1; i < index; i++)
+    {
+        current = current->next;
+    }
+    return current;
+}
+
+
+// Appends an object to the linked list in the object table
+void fl_pushObject(object* obj)
+{
+    (*(getObjAt(r.objectTable.sizeInElements - 1))).next = obj;
+    (*obj).next = NULL;
+}
+
 

@@ -2,6 +2,7 @@
 #include "../common.h"
 #include <stdbool.h>
 #include "shaders.h"
+#include <cglm/call.h>
 
 // A handle to a mesh in memory. Used to modify attributes
 // Do not allocate dynamically on your own, use the built in function instead or unexpected behaviour may occur
@@ -19,12 +20,7 @@ struct Mesh
 typedef struct Mesh mesh;
 
 // Essentially a vec3
-struct Position
-{
-    float xPos;
-    float yPos;
-    float zPos;
-};
+
 
 struct Rotation
 {
@@ -34,15 +30,17 @@ struct Rotation
 
 struct Transform
 {
-    struct Position position;
+    vec3 position;
     struct Rotation rotation;
 };
 
-
+// Add child support
+// Add animation support
 struct Object
 {
-    size_t modelIndex; // The index of the model used by the object
-
+    int* modelIndex; // Pointer to the index of the model used by the object
+    struct Transform transform;
+    struct Object* next;
 };
 typedef struct Object object;
 
@@ -81,7 +79,6 @@ struct RendererMeshBase
     //This value should preferably be staticly allocated
 };
 
-// A collection of those 3 buffers is a mesh
 struct RendererBuffers
 {
     size_t sizeInElements; // size of the meshes array
@@ -89,16 +86,32 @@ struct RendererBuffers
 
 };
 
+struct ObjectTableBase
+{
+    object* objects;    // First element in a linked list
+    size_t sizeInElements;
+};
+
+struct MatrixBase
+{
+    mat4 rotation;
+    mat4 model;
+    mat4 projection;
+    mat4 view;
+};
+
 struct RendererBase
 {
     struct RendererBuffers buffers;
     struct ShadersBase shaders;
+    struct ObjectTableBase objectTable;
+    struct MatrixBase matrices;
 };
 
 
 void fl_initRenderer();
 void fl_uploadModel(mesh m, int* rtnIndex, bool send);
-
+void fl_pushObject(object* obj);
 
 
 
