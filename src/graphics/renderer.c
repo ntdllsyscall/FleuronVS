@@ -21,10 +21,12 @@ void fl_initRenderer()
     r.objectTable.objects = NULL;
     r.objectTable.sizeInElements = 0;
 
-    glmc_mat4_identity(r.matrices.rotation);
     glmc_mat4_identity(r.matrices.model);
     glmc_mat4_identity(r.matrices.projection);
     glmc_mat4_identity(r.matrices.view);
+
+    // TODO: Needs to be float
+    glmc_perspective(90, fleuron.window.width / fleuron.window.height, 0.1, 100, r.matrices.projection);
 
     return;
 }
@@ -391,5 +393,14 @@ void fl_pushObject(object* obj)
     (*(getObjAt(r.objectTable.sizeInElements - 1))).next = obj;
     (*obj).next = NULL;
 }
+
+void fl_renderObjectTable()
+{
+
+
+    return;
+}
+
+
 
 

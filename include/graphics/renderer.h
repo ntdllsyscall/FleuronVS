@@ -24,8 +24,9 @@ typedef struct Mesh mesh;
 
 struct Rotation
 {
-    float angle;
-    // Add axis( vec3 );
+    float pitch;
+    float yaw;
+    float roll;
 };
 
 struct Transform
@@ -92,13 +93,23 @@ struct ObjectTableBase
     size_t sizeInElements;
 };
 
+struct MatrixLocationBase
+{
+    int rotation;
+    int model;
+    int projection;
+    int view;
+};
+
 struct MatrixBase
 {
-    mat4 rotation;
     mat4 model;
     mat4 projection;
     mat4 view;
+
+    struct MatrixLocationBase locations;
 };
+
 
 struct RendererBase
 {

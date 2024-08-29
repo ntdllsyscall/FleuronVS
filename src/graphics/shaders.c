@@ -96,5 +96,14 @@ void fl_createProgram()
     glDeleteShader(r.vertexShader);
     glDeleteShader(r.fragmentShader);
     printf("Successfully linked the shader program!\n");
+
+    fleuron.renderer.matrices.locations.model=  glGetUniformLocation(r.program, "model");
+    fleuron.renderer.matrices.locations.projection =  glGetUniformLocation(r.program, "projection");
+    fleuron.renderer.matrices.locations.view =  glGetUniformLocation(r.program, "view");
+
+    if ((success = glGetError()) != 0 )
+    {
+        fl_error("OpenGl error: fl_createProgram(); %d", success);
+    }
     return;
 }
