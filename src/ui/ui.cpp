@@ -45,6 +45,7 @@ void fl_initUI()
 // Helps with examining buffers of different kind, used for debugging
 // Opotimize checking meshIDInput >= sizeInElements
 static bool displayBufferHandler = false;
+static bool displayObjectHandler = false;
 
 static inline void Debug()
 {
@@ -54,16 +55,52 @@ static inline void Debug()
 	{
 		displayBufferHandler = true;
 	}
-
+	if (ImGui::Button("Object handler"))
+	{
+		displayObjectHandler = true;
+	}
 
 	ImGui::End();
 }
+
+static int objIndex;
+
+
+
+static void objectHandler()
+{
+	if (displayObjectHandler == true)
+	{
+		ImGui::Begin("Object handler", &displayObjectHandler);
+		ImGui::InputInt("Object index", &objIndex);
+		
+		if (objIndex >= fleuron.renderer.objectTable.sizeInElements)
+		{
+			ImGui::Text("Invalid index (Too large)");
+		}
+		else
+		{
+			ImGui::BeginChild("##scroll2", ImVec2(0, 200));
+
+			
+
+			ImGui::EndChild();
+		}
+
+
+		ImGui::End();
+	}
+}
+
+
+
+
+
 
 static int meshIDInput;
 static bool displayInfo;	// Examiner
 static bool displayInfo1;	// Vertices
 static bool displayInfo2;	// Indices
-
 
 static inline void bufferHandler()
 {
@@ -179,6 +216,7 @@ void fl_UI()
 	
 	Debug();
 	bufferHandler();
+	//objectHandler();
 
 	endFrame();
 	return;

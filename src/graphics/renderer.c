@@ -123,7 +123,7 @@ static inline void allocMeshMem(int* i)
         r.buffers.meshes[r.buffers.sizeInElements].ebo.indices = NULL;
         r.buffers.meshes[r.buffers.sizeInElements].ebo.isUsed = 2;
 
-        *i = r.buffers.sizeInElements - 1;
+        *i = r.buffers.sizeInElements - (size_t)1;
         r.buffers.meshes[r.buffers.sizeInElements].pIndex = i;
 
         glGenBuffers(1, &(r.buffers.meshes[*i].vbo.ID));

@@ -26,7 +26,11 @@ void startEngine()
     // Render loop
     while (!glfwWindowShouldClose(fleuron.window.ptrWindow))
     {
-        
+        if ((err = glGetError()) != 0)
+        {
+            printf("[!] ERROR: %d\n", err);
+            system("pause");
+        }
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glClearColor(sin(glfwGetTime()), 1 - sin(glfwGetTime()), 0.6 - sin(glfwGetTime()), 1);
         

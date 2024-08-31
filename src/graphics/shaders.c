@@ -108,9 +108,5 @@ void fl_createProgram()
     fleuron.renderer.matrices.locations.projection =  glGetUniformLocation(r.program, "projection");
     fleuron.renderer.matrices.locations.view =  glGetUniformLocation(r.program, "view");
 
-    if ((success = glGetError()) != 0 )
-    {
-        fl_error("OpenGl error: fl_createProgram(); %d", success);
-    }
     return;
 }
