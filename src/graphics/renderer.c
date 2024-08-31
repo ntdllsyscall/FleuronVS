@@ -59,7 +59,7 @@ static inline printMat4(mat4 m)
     {
         for (int j = 1; j < 5; j++)
         {
-            printf("%f ", m[i][j]);
+            printf("%f ", m[j][i]);
         }
         printf("\n");
     }
@@ -362,6 +362,12 @@ void fl_uploadModel(mesh m, int* rtnIndex, bool send)
         bindEbo(*rtnIndex);
 
         glBufferData(GL_ARRAY_BUFFER, r.buffers.meshes[*rtnIndex].vbo.size, r.buffers.meshes[*rtnIndex].vbo.vertices, GL_STATIC_DRAW);
+
+        if (r.buffers.meshes[*rtnIndex].ebo.isUsed == true)
+        {
+            glBufferData(GL_ELEMENT_ARRAY_BUFFER, r.buffers.meshes[*rtnIndex].ebo.size, r.buffers.meshes[*rtnIndex].ebo.indices, GL_STATIC_DRAW);
+        }
+
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
         glEnableVertexAttribArray(0);
 
@@ -438,22 +444,28 @@ void fl_pushObject(object* obj)
 
 void fl_renderObjectTable()
 {
+    int err;
     object* current;
     for (int i = 0; (current = getObjAt(i)) != NULL; i++)
     {
+        
         // Matrices
         glmc_rotate(r.matrices.rotation, current->transform.rotation.angle, current->transform.rotation.axis);
         glmc_translate(r.matrices.model, current->transform.position);
 
+        
+
         glUniformMatrix4fv(r.matrices.locations.rotation, 1, GL_FALSE, (float*)r.matrices.rotation);
         glUniformMatrix4fv(r.matrices.locations.model, 1, GL_FALSE, (float*)r.matrices.model);
+
+        
 
         glmc_mat4_identity(r.matrices.rotation);
         glmc_mat4_identity(r.matrices.model);
 
-
         // TODO: Future support of child objects should be added;
         sendToPipeline(*(current->p_modelIndex));
+
     }
 
     return;

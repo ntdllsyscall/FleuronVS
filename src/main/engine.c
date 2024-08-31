@@ -22,12 +22,14 @@ void initEngine(int width, int height, const char* title, const char* vertexShad
 
 void startEngine()
 {
-
+    int err = 0;
     // Render loop
     while (!glfwWindowShouldClose(fleuron.window.ptrWindow))
     {
+        
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glClearColor(sin(glfwGetTime()), 1 - sin(glfwGetTime()), 0.6 - sin(glfwGetTime()), 1);
+        
         Update();
         
 

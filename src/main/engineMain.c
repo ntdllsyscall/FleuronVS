@@ -9,52 +9,30 @@ double previous;
 mesh triangle;
 float vert[] =
 {
-     -0.5f, -0.5f, -0.5f,
-     0.5f, -0.5f, -0.5f,
-     0.5f,  0.5f, -0.5f,
-     0.5f,  0.5f, -0.5f,
-    -0.5f,  0.5f, -0.5f,
-    -0.5f, -0.5f, -0.5f,
-
-    -0.5f, -0.5f,  0.5f,
-     0.5f, -0.5f,  0.5f,
-     0.5f,  0.5f,  0.5f,
-     0.5f,  0.5f,  0.5f,
-    -0.5f,  0.5f,  0.5f,
-    -0.5f, -0.5f,  0.5f,
-
-    -0.5f,  0.5f,  0.5f,
-    -0.5f,  0.5f, -0.5f,
-    -0.5f, -0.5f, -0.5f,
-    -0.5f, -0.5f, -0.5f,
-    -0.5f, -0.5f,  0.5f,
-    -0.5f,  0.5f,  0.5f,
-
-     0.5f,  0.5f,  0.5f,
-     0.5f,  0.5f, -0.5f,
-     0.5f, -0.5f, -0.5f,
-     0.5f, -0.5f, -0.5f,
-     0.5f, -0.5f,  0.5f,
-     0.5f,  0.5f,  0.5f,
-
-    -0.5f, -0.5f, -0.5f,
-     0.5f, -0.5f, -0.5f,
-     0.5f, -0.5f,  0.5f,
-     0.5f, -0.5f,  0.5f,
-    -0.5f, -0.5f,  0.5f,
-    -0.5f, -0.5f, -0.5f,
-
-    -0.5f,  0.5f, -0.5f,
-     0.5f,  0.5f, -0.5f,
-     0.5f,  0.5f,  0.5f,
-     0.5f,  0.5f,  0.5f,
-    -0.5f,  0.5f,  0.5f,
-    -0.5f,  0.5f, -0.5f
+    0.5, 0.5, 0.5,
+0.5, 0.5, -0.5,
+0.5, -0.5, 0.5,
+0.5, -0.5, -0.5,
+-0.5, 0.5, 0.5,
+-0.5, 0.5, -0.5,
+-0.5, -0.5, 0.5,
+-0.5, -0.5, -0.5
 };
 
 int ind[] =
 {
-    0, 1, 2, 3, 7, 1, 5, 4, 7, 6, 2, 4, 0, 1
+    0, 2, 1,
+1, 2, 3,
+4, 5, 6,
+5, 7, 6,
+0, 1, 4,
+1, 5, 4,
+2, 6, 3,
+3, 6, 7,
+0, 4, 2,
+2, 4, 6,
+1, 3, 5,
+3, 7, 5
 };
 
 int n = -1;      // The variable to store the ID of the mesh -1 means invalid ID
@@ -66,8 +44,8 @@ int main(void)
     triangle.indices = NULL;
     triangle.vertices = vert;
     triangle.vSize = sizeof(vert);
-    //triangle.indices = ind;
-    //triangle.iSize = sizeof(ind);
+    triangle.indices = ind;
+    triangle.iSize = sizeof(ind);
 
     for (int i = 0; i < sizeof(vert) / sizeof(float); i++)
     {
