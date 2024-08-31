@@ -9,44 +9,90 @@ double previous;
 mesh triangle;
 float vert[] =
 {
-    -0.5f, -0.5f, 0.0f,
-     0.5f, -0.5f, 0.0f,
-     0.0f,  0.5f, 0.0f
+     -0.5f, -0.5f, -0.5f,
+     0.5f, -0.5f, -0.5f,
+     0.5f,  0.5f, -0.5f,
+     0.5f,  0.5f, -0.5f,
+    -0.5f,  0.5f, -0.5f,
+    -0.5f, -0.5f, -0.5f,
+
+    -0.5f, -0.5f,  0.5f,
+     0.5f, -0.5f,  0.5f,
+     0.5f,  0.5f,  0.5f,
+     0.5f,  0.5f,  0.5f,
+    -0.5f,  0.5f,  0.5f,
+    -0.5f, -0.5f,  0.5f,
+
+    -0.5f,  0.5f,  0.5f,
+    -0.5f,  0.5f, -0.5f,
+    -0.5f, -0.5f, -0.5f,
+    -0.5f, -0.5f, -0.5f,
+    -0.5f, -0.5f,  0.5f,
+    -0.5f,  0.5f,  0.5f,
+
+     0.5f,  0.5f,  0.5f,
+     0.5f,  0.5f, -0.5f,
+     0.5f, -0.5f, -0.5f,
+     0.5f, -0.5f, -0.5f,
+     0.5f, -0.5f,  0.5f,
+     0.5f,  0.5f,  0.5f,
+
+    -0.5f, -0.5f, -0.5f,
+     0.5f, -0.5f, -0.5f,
+     0.5f, -0.5f,  0.5f,
+     0.5f, -0.5f,  0.5f,
+    -0.5f, -0.5f,  0.5f,
+    -0.5f, -0.5f, -0.5f,
+
+    -0.5f,  0.5f, -0.5f,
+     0.5f,  0.5f, -0.5f,
+     0.5f,  0.5f,  0.5f,
+     0.5f,  0.5f,  0.5f,
+    -0.5f,  0.5f,  0.5f,
+    -0.5f,  0.5f, -0.5f
 };
+
+int ind[] =
+{
+    0, 1, 2, 3, 7, 1, 5, 4, 7, 6, 2, 4, 0, 1
+};
+
 int n = -1;      // The variable to store the ID of the mesh -1 means invalid ID
-object trig;
+object cube;
+
 int main(void)
 {
     triangle.iSize = 0;
     triangle.indices = NULL;
     triangle.vertices = vert;
     triangle.vSize = sizeof(vert);
+    //triangle.indices = ind;
+    //triangle.iSize = sizeof(ind);
 
     for (int i = 0; i < sizeof(vert) / sizeof(float); i++)
     {
         triangle.vertices[i] = vert[i];
     }
 
-    initEngine(800, 800, "Test", "C:\\Programming\\C\\FleuronVS\\shaders\\vertex.glsl", "C:\\Programming\\C\\FleuronVS\\shaders\\fragment.glsl");
+    initEngine(800, 600, "Test", "C:\\Programming\\C\\FleuronVS\\shaders\\vertex.glsl", "C:\\Programming\\C\\FleuronVS\\shaders\\fragment.glsl");
     glfwSetTime(0);
     current = glfwGetTime();
 
-    // UI code here
 
     fl_uploadModel(triangle, &n, true);
 
 
-    trig.p_modelIndex = &n;
-    trig.transform.position[0] = 0;
-    trig.transform.position[1] = 0;
-    trig.transform.position[2] = 0;
+    cube.p_modelIndex = &n;
+    cube.transform.position[0] = 0;
+    cube.transform.position[1] = 0;
+    cube.transform.position[2] = -21.4;
 
-    trig.transform.rotation.angle = 0.0472;
-    trig.transform.rotation.axis[0] = 0;
-    trig.transform.rotation.axis[1] = 0;
-    trig.transform.rotation.axis[2] = 1;
+    cube.transform.rotation.angle = 0.0472f;
+    cube.transform.rotation.axis[0] = 0.21;
+    cube.transform.rotation.axis[1] = 0.4;
+    cube.transform.rotation.axis[2] = 0.43;
 
-    fl_pushObject(&trig);
+    fl_pushObject(&cube);
 
 
     startEngine();
@@ -60,12 +106,12 @@ void Update()
 {
     previous = current;
     current = glfwGetTime();
-    glClear(GL_COLOR_BUFFER_BIT);
+    
 
-    fl_renderObjectTable();
-    trig.transform.rotation.angle = sin(glfwGetTime());
+    
+    cube.transform.rotation.angle = sin(glfwGetTime());
 
-    glClearColor(sin(glfwGetTime()), 1 - sin(glfwGetTime()), 0.6 - sin(glfwGetTime()), 1);
+    
     //printf("FPS: %f\n", 1 / (current - previous));
 
 }

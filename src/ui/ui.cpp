@@ -44,7 +44,7 @@ void fl_initUI()
 
 // Helps with examining buffers of different kind, used for debugging
 // Opotimize checking meshIDInput >= sizeInElements
-static bool displayBufferHandler = true;
+static bool displayBufferHandler = false;
 
 static inline void Debug()
 {

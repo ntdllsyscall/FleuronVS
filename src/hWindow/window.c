@@ -51,5 +51,7 @@ void fl_resize_callback(GLFWwindow* window, int width, int height)
     fleuron.window.width = width;
     fleuron.window.height = height;
     glViewport(0, 0, width, height);
+    glmc_perspective((45.0f)/ 57.2958, ((float)fleuron.window.width / (float)fleuron.window.height), 0.1f, 100.0f, fleuron.renderer.matrices.projection);
+    glUniformMatrix4fv(fleuron.renderer.matrices.locations.projection, 1, GL_FALSE, (float*)fleuron.renderer.matrices.projection);
     return;
 }

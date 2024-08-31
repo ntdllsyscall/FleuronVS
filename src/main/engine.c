@@ -26,12 +26,16 @@ void startEngine()
     // Render loop
     while (!glfwWindowShouldClose(fleuron.window.ptrWindow))
     {
-        
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glClearColor(sin(glfwGetTime()), 1 - sin(glfwGetTime()), 0.6 - sin(glfwGetTime()), 1);
         Update();
+        
 
         // check and call events and swap the buffers
         glfwPollEvents();
-
+        
+        fl_renderObjectTable();
+        
         fl_UI();
         
 

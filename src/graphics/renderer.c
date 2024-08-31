@@ -3,7 +3,7 @@
 #include <engine.h>
 
 // The renderer handles buffer objects, rendering, etc
-
+#define rad(x) (x/57.2958)
 #define r fleuron.renderer
 
 void fl_initRenderer(const char* vertexShaderSrc, const char* fragmentShaderSrc)
@@ -15,6 +15,7 @@ void fl_initRenderer(const char* vertexShaderSrc, const char* fragmentShaderSrc)
         fl_error("Could not initialize OpenGL \n", FL_FATAL);
     }
     glViewport(0, 0, fleuron.window.width, fleuron.window.height);
+    
     
     // Shader handling
     fl_compileVertexShader(vertexShaderSrc);
@@ -32,20 +33,39 @@ void fl_initRenderer(const char* vertexShaderSrc, const char* fragmentShaderSrc)
     glmc_mat4_identity(fleuron.renderer.matrices.model);
     glmc_mat4_identity(fleuron.renderer.matrices.projection);
     glmc_mat4_identity(fleuron.renderer.matrices.view);
-    
 
-    glUniformMatrix4fv(fleuron.renderer.matrices.locations.projection, 1, GL_FALSE, (float*)fleuron.renderer.matrices.rotation);
-    glUniformMatrix4fv(fleuron.renderer.matrices.locations.view, 1, GL_FALSE, (float*)fleuron.renderer.matrices.view);
+
+    glmc_perspective(rad(45.0f), ((float)fleuron.window.width / (float)fleuron.window.height), 0.1f, 100.0f, r.matrices.projection);
+
     glUniformMatrix4fv(fleuron.renderer.matrices.locations.rotation, 1, GL_FALSE, (float*)fleuron.renderer.matrices.rotation);
     glUniformMatrix4fv(fleuron.renderer.matrices.locations.model, 1, GL_FALSE, (float*)fleuron.renderer.matrices.model);
+    glUniformMatrix4fv(fleuron.renderer.matrices.locations.view, 1, GL_FALSE, (float*)fleuron.renderer.matrices.view);
+    glUniformMatrix4fv(fleuron.renderer.matrices.locations.projection, 1, GL_FALSE, (float*)fleuron.renderer.matrices.projection);
+    
 
-    // TODO: Needs to be float
-    //glmc_perspective(90, fleuron.window.width / fleuron.window.height, 0.1, 100, r.matrices.projection);
+    
+    glEnable(GL_DEPTH_TEST);
 
     return;
 }
 
 
+// ----------------------------------------- DEBUGING ------------------------------------------------ //
+
+
+static inline printMat4(mat4 m)
+{
+    for (int i = 1; i < 5; i++)
+    {
+        for (int j = 1; j < 5; j++)
+        {
+            printf("%f ", m[i][j]);
+        }
+        printf("\n");
+    }
+    printf("\n");
+    return 0;
+}
 
 
 // ---BUFFER HANDLING---
@@ -334,7 +354,7 @@ void fl_uploadModel(mesh m, int* rtnIndex, bool send)
     }
     loadModel(m, *rtnIndex);
 
-    // VBO configuration (Temporary)
+    // TODO: VBO configuration (Temporary)
     if (send == true)
     {
         bindVao(*rtnIndex);
@@ -428,10 +448,11 @@ void fl_renderObjectTable()
         glUniformMatrix4fv(r.matrices.locations.rotation, 1, GL_FALSE, (float*)r.matrices.rotation);
         glUniformMatrix4fv(r.matrices.locations.model, 1, GL_FALSE, (float*)r.matrices.model);
 
-        glmc_mat4_identity(fleuron.renderer.matrices.rotation);
-        glmc_mat4_identity(fleuron.renderer.matrices.model);
+        glmc_mat4_identity(r.matrices.rotation);
+        glmc_mat4_identity(r.matrices.model);
 
-        // Future support of child objects should be added;
+
+        // TODO: Future support of child objects should be added;
         sendToPipeline(*(current->p_modelIndex));
     }
 
