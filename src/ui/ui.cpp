@@ -1,6 +1,21 @@
 #include <ui/ui.h>
 #include <stdio.h>
 
+static inline object* getObjAt(size_t index)
+{
+	if (index >= fleuron.renderer.objectTable.sizeInElements || index < 0)
+	{
+		return NULL;
+	}
+	object* current = fleuron.renderer.objectTable.objects;
+	for (int i = 0; i < index; i++)
+	{
+		current = current->next;
+	}
+	return current;
+}
+
+
 static inline void createUiContext()
 {
 	IMGUI_CHECKVERSION();
@@ -65,8 +80,6 @@ static inline void Debug()
 
 static int objIndex;
 
-
-
 static void objectHandler()
 {
 	if (displayObjectHandler == true)
@@ -74,15 +87,39 @@ static void objectHandler()
 		ImGui::Begin("Object handler", &displayObjectHandler);
 		ImGui::InputInt("Object index", &objIndex);
 		
-		if (objIndex >= fleuron.renderer.objectTable.sizeInElements)
+		if (objIndex >= fleuron.renderer.objectTable.sizeInElements || objIndex < 0)
 		{
-			ImGui::Text("Invalid index (Too large)");
+			ImGui::Text("Invalid index (Too large or < 0)");
 		}
 		else
 		{
-			ImGui::BeginChild("##scroll2", ImVec2(0, 200));
+			object* current = getObjAt(objIndex);
 
+			ImGui::BeginChild("##scrolling2", ImVec2(0, 200));
+
+			ImGui::Text("transform:");
+			ImGui::Text("	position:");
+		
+			ImGui::Text("	");
+			ImGui::SameLine();
+			ImGui::InputFloat3("xyz;", current->transform.position);
 			
+
+			ImGui::Text("	rotation:");
+			ImGui::Text("	");
+			ImGui::SameLine();
+			
+			ImGui::InputFloat("angle", &(current->transform.rotation.angle));
+			ImGui::Text("	");
+			ImGui::SameLine();
+			ImGui::InputFloat3("axis", current->transform.rotation.axis);
+			
+			ImGui::Text("	");
+			ImGui::SameLine();
+			if (ImGui::Button("Normalize axis"))
+			{
+				glm_vec3_normalize(current->transform.rotation.axis);
+			}
 
 			ImGui::EndChild();
 		}
@@ -216,7 +253,7 @@ void fl_UI()
 	
 	Debug();
 	bufferHandler();
-	//objectHandler();
+	objectHandler();
 
 	endFrame();
 	return;

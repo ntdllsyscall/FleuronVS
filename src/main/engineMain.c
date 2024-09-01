@@ -47,11 +47,6 @@ int main(void)
     triangle.indices = ind;
     triangle.iSize = sizeof(ind);
 
-    for (int i = 0; i < sizeof(vert) / sizeof(float); i++)
-    {
-        triangle.vertices[i] = vert[i];
-    }
-
     initEngine(800, 600, "Test", "C:\\Programming\\C\\FleuronVS\\shaders\\vertex.glsl", "C:\\Programming\\C\\FleuronVS\\shaders\\fragment.glsl");
     glfwSetTime(0);
     current = glfwGetTime();
@@ -80,16 +75,21 @@ int main(void)
 
 }
 
+float r = 0.0f;
+
+
 void Update()
 {
     previous = current;
     current = glfwGetTime();
     
 
+    cube.transform.rotation.angle = (r/57);
     
-    cube.transform.rotation.angle = sin(glfwGetTime());
 
-    
-    //printf("FPS: %f\n", 1 / (current - previous));
-
+    r++;
+    if (r > 360)
+    {
+        r = 0;
+    }
 }

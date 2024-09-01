@@ -41,7 +41,6 @@ void fl_initRenderer(const char* vertexShaderSrc, const char* fragmentShaderSrc)
     glUniformMatrix4fv(fleuron.renderer.matrices.locations.model, 1, GL_FALSE, (float*)fleuron.renderer.matrices.model);
     glUniformMatrix4fv(fleuron.renderer.matrices.locations.view, 1, GL_FALSE, (float*)fleuron.renderer.matrices.view);
     glUniformMatrix4fv(fleuron.renderer.matrices.locations.projection, 1, GL_FALSE, (float*)fleuron.renderer.matrices.projection);
-    
 
     
     glEnable(GL_DEPTH_TEST);
