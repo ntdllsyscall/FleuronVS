@@ -450,15 +450,11 @@ void fl_renderObjectTable()
         
         // Matrices
         glmc_rotate(r.matrices.rotation, current->transform.rotation.angle, current->transform.rotation.axis);
-        glmc_translate(r.matrices.model, current->transform.position);
-
-        
+        glmc_translate(r.matrices.model, current->transform.position);        
 
         glUniformMatrix4fv(r.matrices.locations.rotation, 1, GL_FALSE, (float*)r.matrices.rotation);
         glUniformMatrix4fv(r.matrices.locations.model, 1, GL_FALSE, (float*)r.matrices.model);
-
         
-
         glmc_mat4_identity(r.matrices.rotation);
         glmc_mat4_identity(r.matrices.model);
 
