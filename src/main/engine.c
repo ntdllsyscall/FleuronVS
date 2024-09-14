@@ -55,6 +55,15 @@ void cleanUp()
 {
     glfwDestroyWindow(fleuron.window.ptrWindow);
     glfwTerminate();
+    fl_uiCleanUp();
+
+    free(fleuron.renderer.buffers.meshes);
+    
+    fflush(stdin);
+    fflush(stdout);
+    fflush(stderr);
+
+
 
     return;
 }
