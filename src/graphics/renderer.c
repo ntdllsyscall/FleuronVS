@@ -441,6 +441,7 @@ void fl_pushObject(object* obj)
     
 }
 
+// Should not be called by the user
 void fl_renderObjectTable()
 {
     int err;
