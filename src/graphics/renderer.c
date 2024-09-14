@@ -172,6 +172,7 @@ static inline void cpyFloat(float* dst, float* src, size_t size)
     return;
 }
 
+// Copies from src to dst size bytes of type int
 static inline void cpyInt(int* dst, int* src, size_t size)
 {
     for (int i = 0; i < size / sizeof(int); i++)
@@ -181,7 +182,7 @@ static inline void cpyInt(int* dst, int* src, size_t size)
     return;
 }
 
-
+// Binds the VBO of a mesh with index of index
 static inline void bindVbo(int index)
 {
     glBindBuffer(GL_ARRAY_BUFFER, r.buffers.meshes[index].vbo.ID);
@@ -344,7 +345,6 @@ static void loadModel(mesh m, int i)
 
 // Calls loadModel() and sends the model to the GPU with the appropriate settings if send is true
 // This function is user accessible. loadModel() should not be used manually, thus it is static
-// The mesh should have dynamically allocated arrays (verrtices and indices)
 void fl_uploadModel(mesh m, int* rtnIndex, bool send)
 {
     if (send == true)
