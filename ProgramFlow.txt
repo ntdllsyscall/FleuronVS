@@ -1,0 +1,72 @@
+This will be used as a reference document to refer to the state the game engine is left at post initialization. 
+This will also be used as a TODO list:
+
+
+initEngine():
+
+	fl_initWindowingSystem():
+    
+		glfwInit();
+		...
+        fleuron.window.width = 0;
+        fleuron.window.height = 0;
+        fleuron.window.ptrWindow = NULL;
+
+	fl_createWindow():
+		fleuron.window.height = height;
+		fleuron.window.width = width;
+		fleuron.window.title = title;
+		...
+		glfwMakeContextCurrent(fleuron.window.ptrWindow);
+		glfwSetFramebufferSizeCallback(fleuron.window.ptrWindow, fl_resize_callback);
+		glfwSetKeyCallback(fleuron.window.ptrWindow, fl_key_callback);
+		glfwSetCursorPosCallback(fleuron.window.ptrWindow, fl_cursor_position_callback);
+
+	fl_initRenderer():
+		gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)
+		glViewport(0, 0, fleuron.window.width, fleuron.window.height);
+
+		fl_compileVertexShader()
+		fl_compileFragmentShader()
+		
+		fl_createProgram():
+			glUseProgram(r.program);
+
+			fleuron.renderer.matrices.locations.rotation = glGetUniformLocation(r.program, "rotation");
+			fleuron.renderer.matrices.locations.model=  glGetUniformLocation(r.program, "model");
+			fleuron.renderer.matrices.locations.projection =  glGetUniformLocation(r.program, "projection");
+			fleuron.renderer.matrices.locations.view =  glGetUniformLocation(r.program, "view");
+		
+		r.buffers.meshes = NULL;
+		r.buffers.sizeInElements = 0;
+		r.objectTable.objects = NULL;
+		r.objectTable.sizeInElements = 0;
+
+		
+		glmc_mat4_identity(fleuron.renderer.matrices.rotation);
+		glmc_mat4_identity(fleuron.renderer.matrices.model);
+		glmc_mat4_identity(fleuron.renderer.matrices.projection);
+		glmc_mat4_identity(fleuron.renderer.matrices.view);
+
+
+		glmc_perspective(rad(45.0f), ((float)fleuron.window.width / (float)fleuron.window.height), 0.1f, 100.0f, r.matrices.projection);
+
+		glUniformMatrix4fv(fleuron.renderer.matrices.locations.rotation, 1, GL_FALSE, (float*)fleuron.renderer.matrices.rotation);
+		glUniformMatrix4fv(fleuron.renderer.matrices.locations.model, 1, GL_FALSE, (float*)fleuron.renderer.matrices.model);
+		glUniformMatrix4fv(fleuron.renderer.matrices.locations.view, 1, GL_FALSE, (float*)fleuron.renderer.matrices.view);
+		glUniformMatrix4fv(fleuron.renderer.matrices.locations.projection, 1, GL_FALSE, (float*)fleuron.renderer.matrices.projection);
+
+    
+		glEnable(GL_DEPTH_TEST);
+
+	fl_initUI():
+		createUiContext():
+			IMGUI_CHECKVERSION();
+			ImGui::CreateContext();
+
+			// Load fonts here
+
+			ImGui_ImplGlfw_InitForOpenGL(fleuron.window.ptrWindow, true);
+			ImGui_ImplOpenGL3_Init();
+
+			ImGui::StyleColorsDark();

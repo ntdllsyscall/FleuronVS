@@ -3,7 +3,7 @@
 #include <engine.h>
 
 // The renderer handles buffer objects, rendering, etc
-#define rad(x) (x/57.2958)
+#define rad(x) (x/57.2958f)
 #define r fleuron.renderer
 
 void fl_initRenderer(const char* vertexShaderSrc, const char* fragmentShaderSrc)
@@ -27,13 +27,10 @@ void fl_initRenderer(const char* vertexShaderSrc, const char* fragmentShaderSrc)
     r.objectTable.objects = NULL;
     r.objectTable.sizeInElements = 0;
 
-    glUseProgram(r.shaders.program);
-
     glmc_mat4_identity(fleuron.renderer.matrices.rotation);
     glmc_mat4_identity(fleuron.renderer.matrices.model);
     glmc_mat4_identity(fleuron.renderer.matrices.projection);
     glmc_mat4_identity(fleuron.renderer.matrices.view);
-
 
     glmc_perspective(rad(45.0f), ((float)fleuron.window.width / (float)fleuron.window.height), 0.1f, 100.0f, r.matrices.projection);
 
@@ -41,7 +38,6 @@ void fl_initRenderer(const char* vertexShaderSrc, const char* fragmentShaderSrc)
     glUniformMatrix4fv(fleuron.renderer.matrices.locations.model, 1, GL_FALSE, (float*)fleuron.renderer.matrices.model);
     glUniformMatrix4fv(fleuron.renderer.matrices.locations.view, 1, GL_FALSE, (float*)fleuron.renderer.matrices.view);
     glUniformMatrix4fv(fleuron.renderer.matrices.locations.projection, 1, GL_FALSE, (float*)fleuron.renderer.matrices.projection);
-
     
     glEnable(GL_DEPTH_TEST);
 
@@ -444,7 +440,6 @@ void fl_pushObject(object* obj)
 // Should not be called by the user
 void fl_renderObjectTable()
 {
-    int err;
     object* current;
     for (int i = 0; (current = getObjAt(i)) != NULL; i++)
     {

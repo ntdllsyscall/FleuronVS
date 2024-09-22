@@ -10,29 +10,29 @@ mesh triangle;
 float vert[] =
 {
     0.5, 0.5, 0.5,
-0.5, 0.5, -0.5,
-0.5, -0.5, 0.5,
-0.5, -0.5, -0.5,
--0.5, 0.5, 0.5,
--0.5, 0.5, -0.5,
--0.5, -0.5, 0.5,
--0.5, -0.5, -0.5
+    0.5, 0.5, -0.5,
+    0.5, -0.5, 0.5,
+    0.5, -0.5, -0.5,
+    -0.5, 0.5, 0.5,
+    -0.5, 0.5, -0.5,
+    -0.5, -0.5, 0.5,
+    -0.5, -0.5, -0.5
 };
 
 int ind[] =
 {
     0, 2, 1,
-1, 2, 3,
-4, 5, 6,
-5, 7, 6,
-0, 1, 4,
-1, 5, 4,
-2, 6, 3,
-3, 6, 7,
-0, 4, 2,
-2, 4, 6,
-1, 3, 5,
-3, 7, 5
+    1, 2, 3,
+    4, 5, 6,
+    5, 7, 6,
+    0, 1, 4,
+    1, 5, 4,
+    2, 6, 3,
+    3, 6, 7,
+    0, 4, 2,
+    2, 4, 6,
+    1, 3, 5,
+    3, 7, 5
 };
 
 int n = -1;      // The variable to store the ID of the mesh -1 means invalid ID
@@ -56,14 +56,14 @@ int main(void)
 
 
     cube.p_modelIndex = &n;
-    cube.transform.position[0] = 0;
-    cube.transform.position[1] = 0;
-    cube.transform.position[2] = -21.4;
+    cube.transform.position[0] = 0.0f;
+    cube.transform.position[1] = 0.0f;
+    cube.transform.position[2] = -21.4f;
 
     cube.transform.rotation.angle = 0.0472f;
-    cube.transform.rotation.axis[0] = 0.21;
-    cube.transform.rotation.axis[1] = 0.4;
-    cube.transform.rotation.axis[2] = 0.43;
+    cube.transform.rotation.axis[0] = 0.21f;
+    cube.transform.rotation.axis[1] = 0.4f;
+    cube.transform.rotation.axis[2] = 0.43f;
 
     fl_pushObject(&cube);
 
