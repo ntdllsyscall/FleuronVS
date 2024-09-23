@@ -28,6 +28,7 @@
     <ClCompile Include="src\main\engine.c" />
     <ClCompile Include="src\main\engineMain.c" />
     <ClCompile Include="src\main\glad.c" />
+    <ClCompile Include="src\main\main.c" />
     <ClCompile Include="src\ui\ui.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -37,6 +38,7 @@
     <ClInclude Include="include\graphics\shaders.h" />
     <ClInclude Include="include\hWindow\input.h" />
     <ClInclude Include="include\hWindow\window.h" />
+    <ClInclude Include="include\resources\cube.h" />
     <ClInclude Include="include\ui\ui.h" />
   </ItemGroup>
   <ItemGroup>

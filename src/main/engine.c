@@ -1,6 +1,7 @@
 #include <common.h>
 #include <engine.h>
 #include <ui/ui.h>
+#include <hWindow/window.h>
 
 
 struct FleuronEngineBase fleuron;
@@ -22,6 +23,8 @@ void initEngine(int width, int height, const char* title, const char* vertexShad
 
 void startEngine()
 {
+    Start();
+
     int err = 0;
     // Render loop
     while (!glfwWindowShouldClose(fleuron.window.ptrWindow))
