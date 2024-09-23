@@ -39,8 +39,9 @@ struct Transform
 struct Object
 {
     int* p_modelIndex; // Pointer to the index of the model used by the object
-    struct Transform transform;
     struct Object* next;
+    struct Transform transform;
+    bool isDynamic;    // Is Dynamically allocated
 };
 typedef struct Object object;
 

@@ -7,16 +7,53 @@ double current;
 double previous;
 
 mesh triangle;
-float vert[] =
+float cubeVert[] =
 {
-    0.5, 0.5, 0.5,
-    0.5, 0.5, -0.5,
-    0.5, -0.5, 0.5,
-    0.5, -0.5, -0.5,
-    -0.5, 0.5, 0.5,
-    -0.5, 0.5, -0.5,
-    -0.5, -0.5, 0.5,
-    -0.5, -0.5, -0.5
+    
+//  Vertex posision       Vertex colour(RGB)
+    
+    -0.5f, -0.5f, -0.5f,   1.0f, 0.0f,0.0f,
+     0.5f, -0.5f, -0.5f,  0.0f, 1.0f,0.0f,
+     0.5f,  0.5f, -0.5f,  0.0f, 0.0f,1.0f,
+     0.5f,  0.5f, -0.5f,  1.0f, 0.0f,0.0f,
+    -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,0.0f,
+    -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,1.0f,
+
+    -0.5f, -0.5f,  0.5f,  1.0f, 0.0f,0.0f,
+     0.5f, -0.5f,  0.5f,  0.0f, 1.0f,0.0f,
+     0.5f,  0.5f,  0.5f,  0.0f, 0.0f,1.0f,
+     0.5f,  0.5f,  0.5f,  1.0f, 0.0f,0.0f,
+    -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,0.0f,
+    -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,1.0f,
+
+    -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,0.0f,
+    -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,0.0f,
+     -0.5f, -0.5f, -0.5f, 0.0f, 0.0f,1.0f,
+    -0.5f, -0.5f, -0.5f,  1.0f, 0.0f,0.0f,
+    -0.5f, -0.5f,  0.5f,  0.0f, 1.0f,0.0f,
+    -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,1.0f,
+
+     0.5f,  0.5f,  0.5f,  1.0f, 0.0f,0.0f,
+     0.5f,  0.5f, -0.5f,  0.0f, 1.0f,0.0f,
+     0.5f, -0.5f, -0.5f,  0.0f, 0.0f,1.0f,
+     0.5f, -0.5f, -0.5f,  1.0f, 0.0f,0.0f,
+     0.5f, -0.5f,  0.5f,  0.0f, 1.0f,0.0f,
+     0.5f,  0.5f,  0.5f,  0.0f, 0.0f,1.0f,
+
+    -0.5f, -0.5f, -0.5f,  1.0f, 0.0f,0.0f,
+     0.5f, -0.5f, -0.5f,  0.0f, 1.0f,0.0f,
+     0.5f, -0.5f,  0.5f,  0.0f, 0.0f,1.0f,
+     0.5f, -0.5f,  0.5f,  1.0f, 0.0f,0.0f,
+    -0.5f, -0.5f,  0.5f,  0.0f, 1.0f,0.0f,
+    -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,1.0f,
+
+    -0.5f,  0.5f, -0.5f,  1.0f, 0.0f,0.0f,
+     0.5f,  0.5f, -0.5f,  0.0f, 1.0f,0.0f,
+     0.5f,  0.5f,  0.5f,  0.0f, 0.0f,1.0f,
+     0.5f,  0.5f,  0.5f,  1.0f, 0.0f,0.0f,
+    -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,0.0f,
+    -0.5f,  0.5f, -0.5f,  0.0f, 0.0f,1.0f
+    
 };
 
 int ind[] =
@@ -40,12 +77,10 @@ object cube;
 
 int main(void)
 {
-    triangle.iSize = 0;
+    triangle.vertices = cubeVert;
+    triangle.vSize = sizeof(cubeVert);
     triangle.indices = NULL;
-    triangle.vertices = vert;
-    triangle.vSize = sizeof(vert);
-    triangle.indices = ind;
-    triangle.iSize = sizeof(ind);
+    triangle.iSize = 0;
 
     initEngine(800, 600, "Test", "C:\\Programming\\C\\FleuronVS\\shaders\\vertex.glsl", "C:\\Programming\\C\\FleuronVS\\shaders\\fragment.glsl");
     glfwSetTime(0);
@@ -58,12 +93,15 @@ int main(void)
     cube.p_modelIndex = &n;
     cube.transform.position[0] = 0.0f;
     cube.transform.position[1] = 0.0f;
-    cube.transform.position[2] = -21.4f;
+    cube.transform.position[2] = -5.0f;
 
     cube.transform.rotation.angle = 0.0472f;
     cube.transform.rotation.axis[0] = 0.21f;
     cube.transform.rotation.axis[1] = 0.4f;
     cube.transform.rotation.axis[2] = 0.43f;
+    //cube.transform.rotation.axis[2] = 1.0f;
+    //cube.transform.rotation.axis[1] = 0.0f;
+    //cube.transform.rotation.axis[0] = 0.0f;
 
     fl_pushObject(&cube);
 
@@ -82,7 +120,7 @@ void Update()
 {
     previous = current;
     current = glfwGetTime();
-    
+   
 
     cube.transform.rotation.angle = (r/57);
     

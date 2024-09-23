@@ -44,7 +44,6 @@ void startEngine()
         
         fl_UI();
         
-
         glfwSwapBuffers(fleuron.window.ptrWindow);
     }
     cleanUp();
@@ -57,8 +56,21 @@ void cleanUp()
     glfwTerminate();
     fl_uiCleanUp();
 
-    free(fleuron.renderer.buffers.meshes);
-    
+    for (int i = 0; i < fleuron.renderer.buffers.sizeInElements; i++)
+    {
+        free((void*)(fleuron.renderer.buffers.meshes + i));
+    }
+    for (int i = 0; i < fleuron.renderer.objectTable.sizeInElements; i++)
+    {
+        if (fleuron.renderer.objectTable.objects->isDynamic)
+        {
+            free((void*)(fleuron.renderer.objectTable.objects));
+        }
+        fleuron.renderer.objectTable.objects = fleuron.renderer.objectTable.objects->next;
+    }
+
+
+
     fflush(stdin);
     fflush(stdout);
     fflush(stderr);

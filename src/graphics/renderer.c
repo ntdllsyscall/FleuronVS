@@ -137,10 +137,10 @@ static inline void removeMeshMem(int i)
     glDeleteBuffers(1, &(r.buffers.meshes[i].ebo.ID));
     glDeleteVertexArrays(1, &(r.buffers.meshes[i].vao.ID));
 
-    free(r.buffers.meshes[i].vbo.vertices);
+    free((void*)(r.buffers.meshes[i].vbo.vertices));
     if (r.buffers.meshes[i].ebo.isUsed == true)
     {
-        free(r.buffers.meshes[i].ebo.indices);
+        free((void*)(r.buffers.meshes[i].ebo.indices));
     }
 
     *(r.buffers.meshes[i].pIndex) = -1;    // Making the handle invalid
@@ -214,7 +214,7 @@ static inline void unbindEbo()
 
 }
 
-// Loads a Mesh/Model to the Mesh object of index of i
+// Loads or concatenates a Mesh/Model to the Mesh object of index of i
 // This function only loads it into RAM and does not send it to the GPU
 // This function is cruical
 static void loadModel(mesh m, int i)
@@ -363,8 +363,12 @@ void fl_uploadModel(mesh m, int* rtnIndex, bool send)
             glBufferData(GL_ELEMENT_ARRAY_BUFFER, r.buffers.meshes[*rtnIndex].ebo.size, r.buffers.meshes[*rtnIndex].ebo.indices, GL_STATIC_DRAW);
         }
 
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+        // position attribute
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
         glEnableVertexAttribArray(0);
+        // color attribute
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+        glEnableVertexAttribArray(1);
 
         unbindVao();
         unbindEbo();
@@ -389,7 +393,8 @@ static inline void sendToPipeline(int i)
     }
     else
     {
-        glDrawArrays(GL_TRIANGLES, 0, (r.buffers.meshes[i].vbo.size) / (sizeof(float) * 3));
+        // TODO: This should be changed as more vertex attributes are added!
+        glDrawArrays(GL_TRIANGLES, 0, (r.buffers.meshes[i].vbo.size) / (sizeof(float) * 6));
     }
 
     unbindVao();

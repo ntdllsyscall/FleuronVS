@@ -50,12 +50,12 @@ void fl_compileVertexShader(const char* path)
     if (!success)
     {
         glGetShaderInfoLog(r.vertexShader, 512, NULL, infoLog);
-        free(src);
+        free((void*)src);
         fl_error(infoLog, FL_FATAL);
         return;
     }
     fl_error("Successfully compiled vertex shader!\n", FL_NOTICE);
-    free(src);
+    free((void*)src);
     return;
 }
 
@@ -73,12 +73,12 @@ void fl_compileFragmentShader(const char* path)
     if (!success)
     {
         glGetShaderInfoLog(r.fragmentShader, 512, NULL, infoLog);
-        free(src);
+        free((void*)src);
         fl_error(infoLog, FL_FATAL);
         return;
     }
     fl_error("Successfully compiled fragment shader!\n", FL_NOTICE);
-    free(src);
+    free((void*)src);
     return;
 }
 
